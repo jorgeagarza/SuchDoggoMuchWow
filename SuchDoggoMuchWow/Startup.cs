@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SuchDoggoMuchWow.Models;
 
 namespace SuchDoggoMuchWow
 {
@@ -21,6 +23,10 @@ namespace SuchDoggoMuchWow
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var dbConfig = new DbConfig();
+            Configuration.GetSection("DataBase").Bind(dbConfig);
+            services.AddDbContext<DogContext>(options =>
+                options.UseMySql(dbConfig.connectionString));
             services.AddMvc();
         }
 
